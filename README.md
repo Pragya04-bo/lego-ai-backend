@@ -1,122 +1,215 @@
-# 🧩 LEGO.AI — Repo Discovery Agent
 
-Find semantically similar GitHub repositories using Azure OpenAI embeddings.
+# 🧩 LEGO.AI — Multi-Agent Developer Assistant
+
+**LEGO.AI** is a modular **multi-agent AI system** designed to help developers transform ideas into production-ready software faster.
+
+Inspired by LEGO blocks, each AI agent performs a specialized task and can be combined with others to create a powerful developer workflow.
+
+This project demonstrates how multiple AI agents can collaborate to assist developers with:
+
+- 🔎 Discovering relevant GitHub repositories
+- ⚡ Optimizing and improving code
+- 🌍 Finding hackathons and opportunities to implement ideas
 
 ---
 
-## 📁 Folder Structure
+# 🚀 Features
+
+## 🔎 Repo Discovery Agent
+Finds **similar GitHub repositories** using semantic similarity of README files.
+
+Capabilities:
+- Extract README from a repository
+- Generate embeddings
+- Find semantically similar repositories
+- Help developers discover reusable codebases
+
+---
+
+## ⚡ Code Optimization Agent
+Analyzes user code and suggests improvements.
+
+Capabilities:
+- Detect inefficient coding patterns
+- Perform AST-based static analysis
+- Identify potential errors
+- Auto-format code using PEP8 standards
+
+---
+
+## 🌍 Opportunity Finder Agent
+Helps developers **discover hackathons and competitions** related to their ideas.
+
+Capabilities:
+- Extract keywords using Azure Language Service
+- Generate relevant search queries
+- Search the internet for hackathons and coding competitions
+
+---
+
+# 🧠 System Architecture
 
 ```
-repo_discovery_agent/
-├── app/
-│   ├── agents/
-│   │   └── repo_discovery_agent.py   # Orchestrates the discovery pipeline
-│   ├── services/
-│   │   ├── github_service.py         # Fetches README from GitHub API
-│   │   ├── embedding_service.py      # Generates embeddings via Azure OpenAI
-│   │   └── similarity_service.py     # Computes cosine similarity + ranking
-│   ├── models/
-│   │   └── schemas.py                # Pydantic request/response models
-│   ├── api/
-│   │   └── routes.py                 # FastAPI route definitions
-│   └── core/
-│       └── config.py                 # Environment config (Azure, GitHub keys)
-├── scripts/
-│   └── seed_repositories.py          # Pre-populate the repo store with embeddings
-├── tests/
-│   └── test_agent.py                 # Unit tests
-├── .env.example                      # Environment variable template
+
+```
+            User Input
+                 │
+                 ▼
+          LEGO Agent API
+                 │
+    ┌────────────┼────────────┐
+    ▼            ▼            ▼
+```
+
+Repo Discovery   Code Optimizer   Opportunity Finder
+Agent             Agent            Agent
+│                │               │
+└────────────┬───────────────┘
+▼
+Combined AI Response
+
+```
+
+Each agent functions independently and can be extended or replaced without affecting the system — just like LEGO blocks.
+
+---
+
+# 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|--------|
+| FastAPI | API framework |
+| Azure Language Service | Keyword extraction |
+| Sentence Transformers | Semantic embeddings |
+| DuckDuckGo Search (DDGS) | Internet search for opportunities |
+| Python AST | Static code analysis |
+| Pyflakes & Autopep8 | Error detection and formatting |
+
+---
+
+# 📂 Project Structure
+
+```
+
+Lego_Agent
+│
+├── app
+│   ├── agents
+│   │   ├── repo_discovery_agent.py
+│   │   ├── opportunity_agent.py
+│   │   └── code_optimizer_agent.py
+│   │
+│   ├── api
+│   │   └── routes.py
+│   │
+│   └── services
+│
+├── scripts
+│   └── seed_repositories.py
+│
+├── main.py
 ├── requirements.txt
-└── main.py                           # FastAPI app entry point
+└── README.md
+
 ```
 
 ---
 
-## ⚙️ Prerequisites
+# ⚙️ Installation
 
-- Python 3.10+
-- Azure OpenAI resource with a deployed `text-embedding-ada-002` model
-- GitHub Personal Access Token (for higher API rate limits)
+Clone the repository
 
----
+```
 
-## 🚀 Setup & Run
+git clone [https://github.com/Nancy-05-Srivastava/Lego_Agent.git](https://github.com/Nancy-05-Srivastava/Lego_Agent.git)
+cd Lego_Agent
 
-### 1. Clone & install dependencies
+```
 
-```bash
-git clone <your-repo-url>
-cd repo_discovery_agent
+Install dependencies
+
+```
+
 pip install -r requirements.txt
-```
 
-### 2. Configure environment variables
-
-```bash
-cp .env.example .env
-# Edit .env with your actual keys
-```
-
-### 3. Seed the repository store
-
-This pre-fetches READMEs and generates embeddings for a set of known repositories:
-
-```bash
-python scripts/seed_repositories.py
-```
-
-### 4. Start the API server
-
-```bash
-uvicorn main:app --reload --port 8000
-```
-
-### 5. Test the endpoint
-
-```bash
-curl -X POST "http://localhost:8000/api/discover" \
-  -H "Content-Type: application/json" \
-  -d '{"repo_url": "https://github.com/tiangolo/fastapi"}'
-```
-
-Or open the interactive docs at: **http://localhost:8000/docs**
-
----
-
-## 📡 API Reference
-
-### `POST /api/discover`
-
-**Request:**
-```json
-{
-  "repo_url": "https://github.com/owner/repo"
-}
-```
-
-**Response:**
-```json
-{
-  "query_repo": "https://github.com/owner/repo",
-  "similar_repositories": [
-    {
-      "url": "https://github.com/...",
-      "name": "repo-name",
-      "similarity_score": 0.94,
-      "description": "..."
-    }
-  ]
-}
 ```
 
 ---
 
-## 🔑 Environment Variables
+# ▶️ Running the Project
 
-| Variable | Description |
-|---|---|
-| `AZURE_OPENAI_API_KEY` | Your Azure OpenAI API key |
-| `AZURE_OPENAI_ENDPOINT` | e.g. `https://your-resource.openai.azure.com/` |
-| `AZURE_OPENAI_DEPLOYMENT` | Embedding deployment name (e.g. `text-embedding-ada-002`) |
-| `AZURE_OPENAI_API_VERSION` | e.g. `2024-02-01` |
-| `GITHUB_TOKEN` | GitHub Personal Access Token |
+Start the FastAPI server:
+
+```
+
+uvicorn main:app --reload
+
+```
+
+Open the interactive API documentation:
+
+```
+
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+```
+
+---
+
+# 📡 API Endpoints
+
+| Endpoint | Description |
+|--------|-------------|
+| `/api/discover` | Discover similar GitHub repositories |
+| `/api/optimize-code` | Analyze and optimize code |
+| `/api/find-opportunities` | Find hackathons and competitions |
+| `/api/lego-agent` | Run all agents together |
+
+---
+
+# 🧪 Example Request
+
+```
+
+POST /api/lego-agent
+
+````
+
+Example input:
+
+```json
+{
+ "repo_url": "https://github.com/django/django",
+ "code": "for i in range(len(arr)): print(arr[i])",
+ "idea": "AI system for crop disease detection"
+}
+````
+
+---
+
+# 💡 Why LEGO.AI?
+
+Developers often lose productive time due to:
+
+* Searching for relevant codebases
+* Understanding unfamiliar repositories
+* Improving code quality
+* Finding platforms to implement ideas
+
+LEGO.AI reduces this friction by **automating discovery, optimization, and opportunity exploration through AI agents**.
+
+---
+
+# 🔮 Future Improvements
+
+* Integrate Azure OpenAI for intelligent code suggestions
+* Use Azure AI Search for scalable vector search
+* Deploy agents as independent microservices
+* Integrate with GitHub Copilot Extensions
+
+---
+
+
+
+If you want, I can also show you **3 small things that make the README look much more “hackathon-winning”** (badges, screenshots, and architecture diagram).
+```
